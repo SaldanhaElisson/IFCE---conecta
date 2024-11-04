@@ -1,9 +1,8 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import {verifyToken} from "@/actions/userLogin";
-import {NextResponse} from "next/server";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const authenticate = async (req: NextApiRequest, res: NextApiResponse) => {
+const authenticate = async (req: NextRequest, res: NextResponse) => {
     const cookies = req.cookies;
     console.log(cookies)
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
