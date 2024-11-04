@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import {verifyToken} from "@/actions/userLogin";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const authenticate = async (req: NextRequest, res: NextResponse) => {
+const authenticate = async (req: NextRequest) => {
     const cookies = req.cookies;
     console.log(cookies)
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

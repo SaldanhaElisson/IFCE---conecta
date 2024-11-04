@@ -1,8 +1,8 @@
 "use client"
 import {useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation'
-import {getCookie} from "cookies-next";
-import {Flex, Text} from '@radix-ui/themes';
+import { getCookie, deleteCookie } from "cookies-next";
+import {Button, Flex, Text} from '@radix-ui/themes';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
@@ -13,6 +13,10 @@ const Dashboard = () => {
     const [authenticated, setAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState<string>()
+    const handleLogout = async () => {
+        deleteCookie("auth-token");
+        router.push("../");
+    };
 
     useEffect(() => {
         const token = getCookie("auth-token");
@@ -52,7 +56,6 @@ const Dashboard = () => {
         return <div>Carregando...</div>;
     }
 
-
     if (authenticated) {
         return (<Flex
                 className="h-screen bg-black flex justify-center items-center flex-col"
@@ -62,6 +65,12 @@ const Dashboard = () => {
                 >
                     Bem-vindo ao Dashboard - {user}
                 </Text>
+                <Button
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={handleLogout}
+                >
+                    Logout
+                </Button>
             </Flex>
         );
     }
