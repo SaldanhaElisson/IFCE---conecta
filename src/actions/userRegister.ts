@@ -11,6 +11,7 @@ interface FormData {
 }
 
 export const registerUser = async (formData: FormData) => {
+
     const { nome, email, senha } = formData;
     try {
         const user = await prisma.user.create({
@@ -22,6 +23,7 @@ export const registerUser = async (formData: FormData) => {
         });
         return user;
     } catch (error) {
+        console.log(error);
         console.error("Erro ao cadastrar usuário:", error);
         throw new Error("Erro ao cadastrar usuário");
     }

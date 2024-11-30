@@ -2,13 +2,25 @@ datasource db {
   provider = "sqlite"
   url      = "file:./dev.db"
 }
+
 generator client {
   provider = "prisma-client-js"
 }
 
 model User {
-  id       String   @id @default(cuid())
+  id       String @id @default(cuid())
   nome     String
-  email    String   @unique
+  email    String @unique
   password String
+
+  Question Question[]
+}
+
+model Question {
+  id          String @id @default(cuid())
+  titulo      String
+  descricao   String
+  author      User   @relation(fields: [authorId], references: [id])
+  areaAtuacao String
+  authorId    String
 }

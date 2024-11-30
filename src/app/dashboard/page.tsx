@@ -1,18 +1,19 @@
 "use client"
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation'
 import { getCookie, deleteCookie } from "cookies-next";
-import {Button, Flex, Text} from '@radix-ui/themes';
+import {Box, Button, Flex, Section, Separator, Tabs, Text} from '@radix-ui/themes';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import jwt from 'jsonwebtoken';
+import NewQuestion from "@/app/component/NewQuestion/NewQuestion";
 
 const Dashboard = () => {
     const router = useRouter();
     const [authenticated, setAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [user, setUser] = useState<string>()
+    const [userid, setUserId] = useState<string>()
     const handleLogout = async () => {
         deleteCookie("auth-token");
         router.push("../");
@@ -20,13 +21,11 @@ const Dashboard = () => {
 
     useEffect(() => {
         const token = getCookie("auth-token");
-        console.log(token)
         if (!token) {
             router.push('../');
         } else {
             const decoded = jwt.decode(token);
-            console.log(decoded);
-            setUser(decoded.userId)
+            setUserId(decoded.userId)
             fetch('/api/auth', {
                 method: 'GET',
                 headers: {
@@ -58,19 +57,45 @@ const Dashboard = () => {
 
     if (authenticated) {
         return (<Flex
-                className="h-screen bg-black flex justify-center items-center flex-col"
+                className="h-screen  flex justify-center items-center flex-col"
             >
-                <Text
-                    className="text-white text-5xl font-bold"
-                >
-                    Bem-vindo ao Dashboard - {user}
-                </Text>
-                <Button
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={handleLogout}
-                >
-                    Logout
-                </Button>
+                <Box className={"h-16"}>
+
+                </Box>
+                <Separator my="3" size="4" />
+                <Tabs.Root defaultValue="account" className={"w-full"}>
+                    <Tabs.List className="text-white" color={"jade"}>
+                        <Tabs.Trigger className="text-white" value="cadastrar">Cadastrar</Tabs.Trigger>
+                        <Tabs.Trigger value="deletar">Deletar</Tabs.Trigger>
+                        <Tabs.Trigger value="atualizar">Visualizar</Tabs.Trigger>
+                        <Tabs.Trigger value="visualizar">Atualizar</Tabs.Trigger>
+
+                        <Button
+                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                            onClick={handleLogout}
+                        >
+                            Logout
+                        </Button>
+                    </Tabs.List>
+
+                    <Box pt="3">
+                        <Tabs.Content value="cadastrar">
+                            <NewQuestion userid={userid}/>
+                        </Tabs.Content>
+
+                        <Tabs.Content value="deletar">
+                            <Text size="2">Access and update your documents.</Text>
+                        </Tabs.Content>
+
+                        <Tabs.Content value="visualizar">
+                            <Text size="2">Edit your profile or update contact information.</Text>
+                        </Tabs.Content>
+                    </Box>
+
+
+                </Tabs.Root>
+
+
             </Flex>
         );
     }

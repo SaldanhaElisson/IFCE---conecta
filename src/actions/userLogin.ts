@@ -21,7 +21,8 @@ export const loginUser = async (formData: FormData) => {
         const user = await prisma.user.findUnique({ where: { email } });
         if (user && senha == user.password) {
 
-            const tokenGenerate = jwt.sign({ userId: user.nome }, secretKey, { expiresIn: '1h' });
+            console.log(user.id);
+            const tokenGenerate = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '1h' });
             setCookie('auth-token', tokenGenerate, { path: '/' });
             return { success: true, user, tokenGenerate };
         } else {
