@@ -5,9 +5,6 @@ import type {SubmitHandler} from 'react-hook-form';
 import {Controller, useForm} from 'react-hook-form';
 import {toast, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {questionsRegister} from "@/actions/questionRegister";
-import userStore from "@/store/userStore";
-import question from "@/app/container/question";
 import {questionUpdate} from "@/actions/questionUpdate";
 
 interface FormData {

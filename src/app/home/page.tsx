@@ -2,13 +2,14 @@
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation'
 import {getCookie, deleteCookie} from "cookies-next";
-import {Box, Button, Flex, Separator, Tabs, Text} from '@radix-ui/themes';
+import {Box, Button, Flex, Tabs, Text} from '@radix-ui/themes';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-expect-error
 import jwt from 'jsonwebtoken';
 import Question from "@/app/container/question";
 import userStore from "@/store/userStore";
+import AddUser from "../component/AddUser";
 
 
 const Dashboard = () => {
@@ -17,6 +18,8 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
 
     const setUserId = userStore((state) => state.setUserId)
+    const setTypeUser = userStore((state) => state.setTypeUser)
+    const typeUser = userStore((state) => state.typeUser)
 
     const handleLogout = async () => {
         deleteCookie("auth-token");
@@ -30,6 +33,8 @@ const Dashboard = () => {
         } else {
             const decoded = jwt.decode(token);
             setUserId(decoded.userId)
+            setTypeUser(decoded.userType)
+
             fetch('/api/auth', {
                 method: 'GET',
                 headers: {
@@ -55,6 +60,8 @@ const Dashboard = () => {
         }
     }, [router]);
 
+    useEffect(() => { console.log("Imprimindo o tipo de usuário"); console.log(typeUser); }, [typeUser]);
+
     if (loading) {
         return <div>Carregando...</div>;
     }
@@ -68,11 +75,13 @@ const Dashboard = () => {
                 </Box>
                 <Tabs.Root defaultValue="account" className={"w-full"}>
                     <Tabs.List className="text-white" color={"jade"}>
-                            <Tabs.Trigger className="text-white" value="question">Questões</Tabs.Trigger>
-                            <Tabs.Trigger value="enterprise">Empresas</Tabs.Trigger>
+                            <Tabs.Trigger className="text-white" value="questoes">Questões</Tabs.Trigger>
+                        {
+                            typeUser == "administrador" && (
+                                <Tabs.Trigger value="usuarios">Cadastro de Usuário</Tabs.Trigger>
+                            )
+                        }
                             <Tabs.Trigger value="laboratory">Laboratorios</Tabs.Trigger>
-                            <Tabs.Trigger value="atualizar">Duvidas</Tabs.Trigger>
-
                         <Button
                             color={"tomato"}
                             className="text-white font-bold py-2 px-4 rounded"
@@ -83,15 +92,20 @@ const Dashboard = () => {
                     </Tabs.List>
 
                     <Box pt="3">
-                        <Tabs.Content value="question">
-                            <Question/>
-                        </Tabs.Content>
+                        {
+                            typeUser != "Professor" && (<Tabs.Content value="questoes">
+                                <Question/>
+                            </Tabs.Content>)
+                        }
 
-                        <Tabs.Content value="enterprise">
-                        </Tabs.Content>
+                        {
+                            typeUser == "administrador" &&  (<Tabs.Content value="usuarios">
+                                <AddUser />
+                            </Tabs.Content>)
+                        }
 
-                        <Tabs.Content value="laboratory">
-                        </Tabs.Content>
+                        {typeUser != "Empresa" &&   (<Tabs.Content value="laboratory"></Tabs.Content>) }
+
                     </Box>
                 </Tabs.Root>
             </Flex>

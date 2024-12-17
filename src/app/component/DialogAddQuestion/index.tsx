@@ -1,6 +1,6 @@
 import {Button, Dialog, Flex} from "@radix-ui/themes"
 import React from "react";
-import NewQuestion from "@/app/component/NewQuestion";
+import NewQuestion from "../AddQuestion";
 
 
 

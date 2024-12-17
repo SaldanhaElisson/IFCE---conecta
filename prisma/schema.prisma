@@ -8,11 +8,12 @@ generator client {
 }
 
 model User {
-  id       String @id @default(cuid()) @map("_id")
+  id       String     @id @default(cuid()) @map("_id")
   nome     String
-  email    String @unique
+  email    String     @unique
   password String
-
+  userType String
+  mat      String
   Question Question[]
 }
 

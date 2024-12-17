@@ -23,7 +23,7 @@ const Home = () => {
             if (response.success) {
                 document.cookie = `auth-token=${response.tokenGenerate}; path=/`;
                 toast.success("Login bem-sucedido!");
-                router.push("/dashboard");
+                router.push("/home");
             }
         } catch (error) {
             console.log(error)
